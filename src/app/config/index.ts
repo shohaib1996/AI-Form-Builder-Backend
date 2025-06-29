@@ -7,5 +7,7 @@ dotenv.config({path: path.join((process.cwd()), '.env')});
 export default {
     PORT: process.env.PORT || 5000,
     MONGO_URI: process.env.DB_URI,
-    JWT_SECRET: process.env.JWT_SECRET
+    JWT_SECRET: process.env.JWT_SECRET,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    DEEPSEEK_API_KEY: process.env.DEEPSEEK_API_KEY,
 }
