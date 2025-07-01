@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { generateToken } from '../../utils/generateToken';
 import { IUser } from './user.interface';
 import { ApiError } from '../../errors/ApiError';
+import { object } from 'zod';
 
 export const signupService = async (userData: IUser) => {
   const user = await User.create(userData);
@@ -16,7 +17,7 @@ export const signinService = async (email: string, password: string) => {
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) throw new ApiError(401, 'Invalid credentials');
 
-  const token = generateToken(user._id as string);
+  const token = generateToken(user);
   return { user, token };
 };
 

@@ -1,4 +1,10 @@
-export const userRoles = ["user", "admin"] as const;
-
+export const userRoles = {
+  USER: "user",
+  ADMIN: "admin",
+} as const;
 export const defaultRole = "user";
-export const defaultPlanType = "normal";
+export const userPlanTypes = {
+  NORMAL: "normal",
+  PREMIUM: "premium",
+} as const;
+export const defaultPlan = userPlanTypes.NORMAL;
