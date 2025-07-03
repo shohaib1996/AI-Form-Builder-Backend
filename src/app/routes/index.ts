@@ -2,7 +2,8 @@
 import { Router } from "express";
 import UserRoutes from "./../modules/users/user.route";
 import FormRoutes from "./../modules/form/form.route";
-import path from "path";
+import ResponseRoutes from "./../modules/response/response.routes";
+
 
 
 const router = Router();
@@ -15,6 +16,10 @@ const moduleRoutes = [
   {
     path: "/form",
     route: FormRoutes,
+  },
+  {
+    path: "/response",
+    route: ResponseRoutes,
   }
 
 ];

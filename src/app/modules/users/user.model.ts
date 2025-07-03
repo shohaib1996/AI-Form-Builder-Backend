@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 import { IUser } from "./user.interface";
 import bcrypt from "bcrypt";
-import { defaultPlanType, defaultRole } from "./user.constant";
+import { defaultRole, userPlanTypes } from "./user.constant";
 
 const userSchema = new Schema<IUser>(
   {
@@ -9,7 +9,7 @@ const userSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     photo: { type: String, default: "" },
-    planType: { type: String, enum: ["normal", "premium"], default: defaultPlanType },
+    planType: { type: String, enum: ["normal", "premium"], default: userPlanTypes.NORMAL },
     role: { type: String, enum: ["user", "admin"], default: defaultRole },
   },
   {
