@@ -1,11 +1,13 @@
 import express from 'express';
 import{ cancel, checkout, complete } from './payment.controller';
+import { auth } from '../../middlewares/auth';
+import { userRoles } from '../users/user.constant';
 
 
 const router = express.Router();
 
-router.post('/checkout', checkout);
-router.get('/complete',complete);
+router.post('/checkout', auth([userRoles.USER, userRoles.ADMIN]), checkout);
+router.get('/complete', auth([userRoles.USER]), complete);
 router.get('/cancel', cancel);
 
 export default router;

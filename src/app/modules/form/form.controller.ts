@@ -1,13 +1,19 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import * as FormService from './form.services';
+import { AuthRequest } from '../../middlewares/auth';
 
+// Extend Express Request interface to include 'user'
 export const createFormWithAI: RequestHandler = async (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction,
 ) => {
   const { prompt, title, description } = req.body;
-  const userId = '6860ac211adfd4e7160d605c';
+  if (!req.user || !req.user._id) {
+    res.status(401).json({ success: false, message: 'Unauthorized: User not found' });
+    return;
+  }
+  const userId = req.user._id;
   console.log(req.body);
 
   try {
@@ -29,11 +35,15 @@ export const createFormWithAI: RequestHandler = async (
 };
 
 export const getAllForms: RequestHandler = async (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction,
 ) => {
-  const userId = '6860ac211adfd4e7160d605c';
+   if (!req.user || !req.user._id) {
+    res.status(401).json({ success: false, message: 'Unauthorized: User not found' });
+    return;
+  }
+  const userId = req.user._id;
   try {
     const forms = await FormService.getAllForms(userId);
     res.status(200).json({ success: true, data: forms });

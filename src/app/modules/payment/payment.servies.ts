@@ -1,12 +1,22 @@
-import Stripe from 'stripe';
+
 import config from '../../config';
 import stripe from '../../utils/stripe';
+import { Subscription } from './subscription.model';
 
 interface LineItem {
   name: string;
   amount: number; // in USD cents (example: 5000 = $50)
   currency: string;
   quantity: number;
+}
+
+interface CreateSubscriptionData {
+  userId: string;
+  planName: string;
+  status: string;
+  stripeSubscriptionId: string;
+  startedAt: Date;
+  endsAt: Date | null;
 }
 
 export const createCheckoutSession = async (items: LineItem[]) => {
@@ -16,7 +26,7 @@ export const createCheckoutSession = async (items: LineItem[]) => {
       product_data: {
         name: item.name,
       },
-      unit_amount: item.amount * 100, 
+      unit_amount: item.amount * 100,
     },
     quantity: item.quantity,
   }));
@@ -25,7 +35,7 @@ export const createCheckoutSession = async (items: LineItem[]) => {
     line_items,
     mode: 'payment',
     shipping_address_collection: {
-      allowed_countries: config.ALLOWED_COUNTRIES as any[]
+      allowed_countries: config.ALLOWED_COUNTRIES as any[],
     },
     success_url: `${config.BASE_URL}/complete?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${config.BASE_URL}/cancel`,
@@ -47,4 +57,19 @@ export const getCheckoutResult = async (sessionId: string) => {
   ]);
 
   return { session, lineItems };
+};
+
+export const addSubscription = async (data: CreateSubscriptionData) => {
+
+  const subscription = new Subscription({
+    userId: data.userId,
+    planName: data.planName,
+    status: data.status,
+    stripeSubscriptionId: data.stripeSubscriptionId,
+    startedAt: data.startedAt,
+    endsAt: data.endsAt,
+  });
+
+  await subscription.save();
+  return subscription;
 };

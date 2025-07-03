@@ -4,8 +4,16 @@ import config from '../config';
 
 const JWT_SECRET = config.JWT_SECRET || 'your_jwt_secret';
 
-interface AuthRequest extends Request {
-  user?: any;
+interface DecodedUser {
+  _id: string;
+  email: string;
+  role: string;
+  planType: string;
+
+}
+
+export interface AuthRequest extends Request {
+  user?: DecodedUser;
 }
 
 export const auth = (roles: string[] = []) => {
@@ -23,7 +31,10 @@ export const auth = (roles: string[] = []) => {
     try {
       const decoded = jwt.verify(token, JWT_SECRET) as any;
       req.user = decoded.user;
-      if (roles.length && (!req.user.role || !roles.includes(req.user.role))) {
+      if (
+        roles.length &&
+        (!req.user || !req.user.role || !roles.includes(req.user.role))
+      ) {
         res.status(403).json({ message: 'Forbidden: Insufficient role' });
         return;
       }
