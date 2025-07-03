@@ -3,6 +3,7 @@ import { Router } from "express";
 import UserRoutes from "./../modules/users/user.route";
 import FormRoutes from "./../modules/form/form.route";
 import ResponseRoutes from "./../modules/response/response.routes";
+import PaymentRoutes from "./../modules/payment/payment.routes";
 
 
 
@@ -20,6 +21,10 @@ const moduleRoutes = [
   {
     path: "/response",
     route: ResponseRoutes,
+  },
+  {
+    path: "/payment",
+    route: PaymentRoutes,
   }
 
 ];
