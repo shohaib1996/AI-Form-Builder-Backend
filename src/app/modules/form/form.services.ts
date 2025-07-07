@@ -25,6 +25,7 @@ Each field should have name, label, type (text, email, number, select, etc.), an
   try {
     fields = JSON.parse(content!);
   } catch (error) {
+    console.log(error);
     throw new Error('AI response could not be parsed as JSON');
   }
 

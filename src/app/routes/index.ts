@@ -3,10 +3,15 @@ import UserRoutes from './../modules/users/user.route';
 import FormRoutes from './../modules/form/form.route';
 import ResponseRoutes from './../modules/response/response.routes';
 import PaymentRoutes from './../modules/payment/payment.routes';
+import DashboardRoutes from '../modules/dashboard/dashboard.route';
 
 const router = Router();
 
 const moduleRoutes = [
+  {
+    path: '/dashboard',
+    route: DashboardRoutes,
+  },
   {
     path: '/auth',
     route: UserRoutes,

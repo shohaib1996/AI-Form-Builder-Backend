@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from 'express';
+import { Request, Response } from 'express';
 import * as PaymentService from './payment.servies';
 import { AuthRequest } from '../../middlewares/auth';
 import { userPlanTypes } from '../users/user.constant';
@@ -29,8 +29,7 @@ export const complete = async (req: AuthRequest, res: Response) => {
   const sessionId = req.query.session_id as string;
 
   try {
-    const { session, lineItems } =
-      await PaymentService.getCheckoutResult(sessionId);
+    const { session } = await PaymentService.getCheckoutResult(sessionId);
 
     if (!req.user || !req.user._id) {
       res
@@ -43,7 +42,6 @@ export const complete = async (req: AuthRequest, res: Response) => {
     const planName = userPlanTypes.PREMIUM;
 
     if (!userId) {
-      console.warn('⚠️ No userId found in session metadata');
       res.status(400).json({ success: false, message: 'User ID not found' });
       return;
     }
@@ -64,7 +62,7 @@ export const complete = async (req: AuthRequest, res: Response) => {
 
     await PaymentService.addSubscription(subscription);
 
-    await updateProfileService(userId, {planType: userPlanTypes.PREMIUM})
+    await updateProfileService(userId, { planType: userPlanTypes.PREMIUM });
 
     res.status(200).json({
       success: true,

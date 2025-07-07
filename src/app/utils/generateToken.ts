@@ -10,6 +10,7 @@ export const verifyToken = (token: string) => {
   try {
     return jwt.verify(token, config.JWT_SECRET as string);
   } catch (error) {
+    console.log(error);
     return null;
   }
 };

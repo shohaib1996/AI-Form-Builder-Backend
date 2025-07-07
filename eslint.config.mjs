@@ -23,6 +23,7 @@ export default [
       'prefer-const': 'error',
       'no-undef': 'error',
       'no-console': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off',
     },
   },
   ...tseslint.configs.recommended,

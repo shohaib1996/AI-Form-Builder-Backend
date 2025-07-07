@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
+import { Request, RequestHandler, Response } from 'express';
 import * as FormService from './form.services';
 import { AuthRequest } from '../../middlewares/auth';
 
@@ -6,7 +6,6 @@ import { AuthRequest } from '../../middlewares/auth';
 export const createFormWithAI: RequestHandler = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction,
 ) => {
   const { prompt, title, description } = req.body;
   if (!req.user || !req.user._id) {
@@ -16,7 +15,6 @@ export const createFormWithAI: RequestHandler = async (
     return;
   }
   const userId = req.user._id;
-  console.log(req.body);
 
   try {
     const fields = await FormService.generateFormFields(prompt);
@@ -39,7 +37,6 @@ export const createFormWithAI: RequestHandler = async (
 export const getAllForms: RequestHandler = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction,
 ) => {
   if (!req.user || !req.user._id) {
     res
@@ -61,7 +58,6 @@ export const getAllForms: RequestHandler = async (
 export const getFormById: RequestHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ) => {
   const { id } = req.params;
   try {
@@ -81,7 +77,6 @@ export const getFormById: RequestHandler = async (
 export const updateForm: RequestHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ) => {
   const { id } = req.params;
   const formData = req.body;
@@ -103,7 +98,6 @@ export const updateForm: RequestHandler = async (
 export const togglePublishForm: RequestHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ) => {
   const { id } = req.params;
   try {
@@ -123,7 +117,6 @@ export const togglePublishForm: RequestHandler = async (
 export const deleteForm: RequestHandler = async (
   req: Request,
   res: Response,
-  next: NextFunction,
 ) => {
   const { id } = req.params;
 
