@@ -3,6 +3,7 @@ import express, { Application, Request, Response } from 'express';
 import router from './app/routes';
 import { globalErrorHandler } from './app/middlewares/globalErrorHandler';
 import { notFound } from './app/middlewares/notFound';
+import cookieSession from 'cookie-session';
 
 const app: Application = express();
 
@@ -12,6 +13,12 @@ app.use(
     origin: ['http://localhost:3000', 'http://your-other-address.com'],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
+  }),
+);
+app.use(
+  cookieSession({
+    maxAge: 24 * 60 * 60 * 1000, 
+    keys: [process.env.SESSION_SECRET as string], 
   }),
 );
 app.use('/api', router);
