@@ -4,6 +4,7 @@ import router from './app/routes';
 import { globalErrorHandler } from './app/middlewares/globalErrorHandler';
 import { notFound } from './app/middlewares/notFound';
 import cookieSession from 'cookie-session';
+import config from './app/config';
 
 const app: Application = express();
 
@@ -18,7 +19,7 @@ app.use(
 app.use(
   cookieSession({
     maxAge: 24 * 60 * 60 * 1000,
-    keys: [process.env.SESSION_SECRET as string],
+    keys: [config.SESSION_SECRET as string],
   }),
 );
 app.use('/api', router);
