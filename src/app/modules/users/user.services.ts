@@ -3,7 +3,6 @@ import bcrypt from 'bcrypt';
 import { generateToken } from '../../utils/generateToken';
 import { IUser } from './user.interface';
 import { ApiError } from '../../errors/ApiError';
-import { object } from 'zod';
 
 export const signupService = async (userData: IUser) => {
   const user = await User.create(userData);
@@ -19,6 +18,11 @@ export const signinService = async (email: string, password: string) => {
 
   const token = generateToken(user);
   return { user, token };
+};
+
+export const getUserDataService = async (id: string) => {
+  const user = await User.findById(id);
+  return user;
 };
 
 export const updateProfileService = async (

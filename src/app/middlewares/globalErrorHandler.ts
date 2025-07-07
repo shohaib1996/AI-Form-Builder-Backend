@@ -1,7 +1,12 @@
 import { ErrorRequestHandler } from 'express';
 import { ApiError } from '../errors/ApiError';
 
-export const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+export const globalErrorHandler: ErrorRequestHandler = (
+  err,
+  req,
+  res,
+  next,
+) => {
   if (err instanceof ApiError) {
     res.status(err.statusCode).json({
       success: false,

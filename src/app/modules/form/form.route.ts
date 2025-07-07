@@ -22,7 +22,7 @@ router.post(
   '/ai',
   auth([userRoles.ADMIN, userRoles.USER]),
   validateRequest(aiFormSchema),
-  createFormWithAI
+  createFormWithAI,
 );
 
 // Get all forms (of current user)
@@ -32,10 +32,19 @@ router.get('/', auth([userRoles.ADMIN, userRoles.USER]), getAllForms);
 router.get('/:id', auth([userRoles.ADMIN, userRoles.USER]), getFormById);
 
 // Update form
-router.patch('/:id', auth([userRoles.ADMIN, userRoles.USER]), validateRequest(formValidationSchema), updateForm);
+router.patch(
+  '/:id',
+  auth([userRoles.ADMIN, userRoles.USER]),
+  validateRequest(formValidationSchema),
+  updateForm,
+);
 
 // Toggle publish/unpublish form
-router.patch('/:id/publish', auth([userRoles.ADMIN, userRoles.USER]), togglePublishForm);
+router.patch(
+  '/:id/publish',
+  auth([userRoles.ADMIN, userRoles.USER]),
+  togglePublishForm,
+);
 
 // Delete form
 router.delete('/:id', auth([userRoles.ADMIN, userRoles.USER]), deleteForm);

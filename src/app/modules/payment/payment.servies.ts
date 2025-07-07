@@ -1,4 +1,3 @@
-
 import config from '../../config';
 import stripe from '../../utils/stripe';
 import { Subscription } from './subscription.model';
@@ -60,7 +59,6 @@ export const getCheckoutResult = async (sessionId: string) => {
 };
 
 export const addSubscription = async (data: CreateSubscriptionData) => {
-
   const subscription = new Subscription({
     userId: data.userId,
     planName: data.planName,
@@ -72,4 +70,9 @@ export const addSubscription = async (data: CreateSubscriptionData) => {
 
   await subscription.save();
   return subscription;
+};
+
+export const getSubscriptionByUserId = async (userId: string) => {
+  const subscriptions = await Subscription.find({ userId });
+  return subscriptions;
 };

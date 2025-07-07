@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const signupSchema = z.object({
   body: z.object({
@@ -20,7 +20,7 @@ export const updateProfileSchema = z.object({
     name: z.string().optional(),
     email: z.string().email().optional(),
     password: z.string().min(6).optional(),
-    planType: z.enum(["normal", "premium"]).optional(),
+    planType: z.enum(['normal', 'premium']).optional(),
   }),
 });
 

@@ -9,7 +9,6 @@ interface DecodedUser {
   email: string;
   role: string;
   planType: string;
-
 }
 
 export interface AuthRequest extends Request {

@@ -19,8 +19,7 @@ const responseSchema = new Schema<IResponse>(
   },
   {
     timestamps: false,
-  }
+  },
 );
 
 export const ResponseModel = model<IResponse>('Response', responseSchema);
-

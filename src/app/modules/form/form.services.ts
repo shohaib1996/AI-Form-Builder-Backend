@@ -1,6 +1,6 @@
-import OpenAI from "openai";
-import config from "../../config";
-import { Form } from "./form.model";
+import OpenAI from 'openai';
+import config from '../../config';
+import { Form } from './form.model';
 const openai = new OpenAI({
   apiKey: config.OPENAI_API_KEY,
   // baseURL: "https://api.deepseek.com/v1"
@@ -8,13 +8,13 @@ const openai = new OpenAI({
 
 export const generateFormFields = async (prompt: string): Promise<any[]> => {
   const aiPrompt = `Generate JSON field definitions for a form based on this description: "${prompt}". 
-Each field should have name, label, type (text, email, number, select, etc.), and required (true/false).`;
+Each field should have name, label, type (text, email, number, select, etc.), and required (true/false) and don't generate any file fields rather than generate a text field where take the document link (e.g. "http://example.com/document.pdf") from user. For selecting options, provide an array of options.`;
 
   const response = await openai.chat.completions.create({
-    model: "gpt-3.5-turbo", // or "o4-mini" if you have access
+    model: 'gpt-3.5-turbo', // or "o4-mini" if you have access
     messages: [
       {
-        role: "user",
+        role: 'user',
         content: aiPrompt,
       },
     ],
@@ -25,7 +25,7 @@ Each field should have name, label, type (text, email, number, select, etc.), an
   try {
     fields = JSON.parse(content!);
   } catch (error) {
-    throw new Error("AI response could not be parsed as JSON");
+    throw new Error('AI response could not be parsed as JSON');
   }
 
   return fields;
@@ -44,26 +44,22 @@ export const getAllForms = async (userId: string) => {
 export const getFormById = async (id: string) => {
   const form = await Form.findById(id);
   if (!form) {
-    throw new Error("Form not found");
+    throw new Error('Form not found');
   }
   return form;
 };
 
 export const updateForm = async (id: string, formData: any) => {
-  const updatedForm = await Form.findByIdAndUpdate(
-    id,
-    formData,
-    { new: true }
-  );
+  const updatedForm = await Form.findByIdAndUpdate(id, formData, { new: true });
   if (!updatedForm) {
-    throw new Error("Form not found");
+    throw new Error('Form not found');
   }
   return updatedForm;
 };
 export const deleteForm = async (id: string) => {
   const deletedForm = await Form.findByIdAndDelete(id);
   if (!deletedForm) {
-    throw new Error("Form not found");
+    throw new Error('Form not found');
   }
   return deletedForm;
 };
@@ -71,9 +67,9 @@ export const deleteForm = async (id: string) => {
 export const togglePublishForm = async (id: string) => {
   const form = await Form.findById(id);
   if (!form) {
-    throw new Error("Form not found");
+    throw new Error('Form not found');
   }
   form.isPublished = !form.isPublished;
   const updatedForm = await form.save();
   return updatedForm;
-}
+};

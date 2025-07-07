@@ -10,7 +10,9 @@ export const createFormWithAI: RequestHandler = async (
 ) => {
   const { prompt, title, description } = req.body;
   if (!req.user || !req.user._id) {
-    res.status(401).json({ success: false, message: 'Unauthorized: User not found' });
+    res
+      .status(401)
+      .json({ success: false, message: 'Unauthorized: User not found' });
     return;
   }
   const userId = req.user._id;
@@ -39,8 +41,10 @@ export const getAllForms: RequestHandler = async (
   res: Response,
   next: NextFunction,
 ) => {
-   if (!req.user || !req.user._id) {
-    res.status(401).json({ success: false, message: 'Unauthorized: User not found' });
+  if (!req.user || !req.user._id) {
+    res
+      .status(401)
+      .json({ success: false, message: 'Unauthorized: User not found' });
     return;
   }
   const userId = req.user._id;

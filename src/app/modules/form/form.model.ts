@@ -11,8 +11,8 @@ const formSchema = new Schema<IForm>(
     templateId: { type: String },
   },
   {
-    timestamps: true, 
-  }
+    timestamps: true,
+  },
 );
 
 export const Form = model<IForm>('Form', formSchema);

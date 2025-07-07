@@ -10,7 +10,10 @@ export const submitResponse = async (req: Request, res: Response) => {
     const newResponse = await ResponseService.createResponse(formId, answers);
     res.status(201).json({ success: true, data: newResponse });
   } catch (error) {
-    res.status(500).json({ success: false, message: error instanceof Error ? error.message : 'Unknown error' });
+    res.status(500).json({
+      success: false,
+      message: error instanceof Error ? error.message : 'Unknown error',
+    });
   }
 };
 
@@ -21,7 +24,10 @@ export const getResponses = async (req: Request, res: Response) => {
     const responses = await ResponseService.getResponses(formId);
     res.status(200).json({ success: true, data: responses });
   } catch (error) {
-    res.status(500).json({ success: false, message: error instanceof Error ? error.message : 'Unknown error' });
+    res.status(500).json({
+      success: false,
+      message: error instanceof Error ? error.message : 'Unknown error',
+    });
   }
 };
 
@@ -36,6 +42,9 @@ export const getSingleResponse = async (req: Request, res: Response) => {
     }
     res.status(200).json({ success: true, data: response });
   } catch (error) {
-    res.status(500).json({ success: false, message: error instanceof Error ? error.message : 'Unknown error' });
+    res.status(500).json({
+      success: false,
+      message: error instanceof Error ? error.message : 'Unknown error',
+    });
   }
 };
