@@ -23,7 +23,7 @@ export const createFormWithAI: RequestHandler = async (
       title,
       description,
       fields,
-      isPublished: false,
+      isPublished: true,
       templateId: 'ai-generated-template',
     });
     res.status(201).json({ success: true, data: form });

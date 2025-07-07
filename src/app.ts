@@ -17,8 +17,8 @@ app.use(
 );
 app.use(
   cookieSession({
-    maxAge: 24 * 60 * 60 * 1000, 
-    keys: [process.env.SESSION_SECRET as string], 
+    maxAge: 24 * 60 * 60 * 1000,
+    keys: [process.env.SESSION_SECRET as string],
   }),
 );
 app.use('/api', router);

@@ -45,3 +45,20 @@ export const resetPasswordService = async (id: string, newPassword: string) => {
   );
   return user;
 };
+
+export const findOrCreateGoogleUser = async (profile: {
+  email: string;
+  name: string;
+  picture?: string;
+}) => {
+  let user = await User.findOne({ email: profile.email });
+
+  if (!user) {
+    user = await User.create({
+      name: profile.name,
+      email: profile.email,
+      photo: profile.picture || '',
+    });
+  }
+  return user;
+};

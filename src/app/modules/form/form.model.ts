@@ -7,7 +7,7 @@ const formSchema = new Schema<IForm>(
     title: { type: String, required: true },
     description: { type: String },
     fields: { type: Schema.Types.Mixed, required: true, default: [] },
-    isPublished: { type: Boolean, default: false },
+    isPublished: { type: Boolean, default: true },
     templateId: { type: String },
   },
   {
