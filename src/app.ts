@@ -8,14 +8,18 @@ import config from './app/config';
 
 const app: Application = express();
 
-app.use(express.json());
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://form-ai-builder.vercel.app'],
-    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    origin: ["http://localhost:3000", "https://form-ai-builder.vercel.app"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     credentials: true,
-  }),
+  })
 );
+
+app.options("*", cors());
+
+
+app.use(express.json());
 app.use(
   cookieSession({
     maxAge: 24 * 60 * 60 * 1000,
