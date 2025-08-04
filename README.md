@@ -21,12 +21,6 @@ AI Form Builder is an intelligent web-based platform that empowers users to effo
 - ✅ **AI-Powered Form Creation**  
   Generate entire form structures using natural language prompts (powered by OpenAI and DeepSeek).
 
-- 🧩 **Drag-and-Drop Form Editor**  
-  Reorder, remove, and edit fields in real-time.
-
-- 🗂 **Form Templates**  
-  Start with pre-designed templates or let AI generate one.
-
 - 🔒 **User Authentication**  
   Google OAuth and secure JWT-based sessions.
 
