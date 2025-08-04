@@ -141,3 +141,22 @@ export const deleteForm: RequestHandler = async (
     res.status(500).json({ success: false, message: errorMessage });
   }
 };
+
+export const getAllFormsForAdmin: RequestHandler = async (req, res) => {
+  const { page, limit, searchTerm } = req.query;
+
+  const options = {
+    page: page ? parseInt(page as string, 10) : 1,
+    limit: limit ? parseInt(limit as string, 10) : 10,
+    searchTerm: searchTerm as string | undefined,
+  };
+
+  try {
+    const result = await FormService.getAllFormsForAdmin(options);
+    res.status(200).json({ success: true, ...result });
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'An unknown error occurred';
+    res.status(500).json({ success: false, message: errorMessage });
+  }
+};

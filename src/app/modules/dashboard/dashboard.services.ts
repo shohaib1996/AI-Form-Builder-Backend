@@ -1,6 +1,7 @@
 import { Types } from 'mongoose';
 import { Form } from '../form/form.model';
 import { ResponseModel } from '../response/response.model';
+import { User } from '../users/user.model';
 
 import {
   IFormStatus,
@@ -136,9 +137,84 @@ const getFormStatus = async (userId: string): Promise<IFormStatus[]> => {
   return formStatus;
 };
 
+// Admin services
+const getAdminDashboardStats = async () => {
+  const totalUsers = await User.countDocuments();
+  const premiumUsers = await User.countDocuments({ planType: 'premium' });
+  const totalForms = await Form.countDocuments();
+  const totalResponses = await ResponseModel.countDocuments();
+
+  return {
+    totalUsers,
+    premiumUsers,
+    totalForms,
+    totalResponses,
+  };
+};
+
+const getUserGrowthForAdmin = async () => {
+  const userGrowth = await User.aggregate([
+    {
+      $group: {
+        _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { _id: 1 } },
+    { $project: { date: '$_id', count: 1, _id: 0 } },
+  ]);
+  return userGrowth;
+};
+
+const getPlanDistributionForAdmin = async () => {
+  const planDistribution = await User.aggregate([
+    {
+      $group: {
+        _id: '$planType',
+        count: { $sum: 1 },
+      },
+    },
+    { $project: { plan: '$_id', count: 1, _id: 0 } },
+  ]);
+  return planDistribution;
+};
+
+const getFormCreationTrendForAdmin = async () => {
+  const formCreationTrend = await Form.aggregate([
+    {
+      $group: {
+        _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { _id: 1 } },
+    { $project: { month: '$_id', count: 1, _id: 0 } },
+  ]);
+  return formCreationTrend;
+};
+
+const getResponseSubmissionTrendForAdmin = async () => {
+  const responseSubmissionTrend = await ResponseModel.aggregate([
+    {
+      $group: {
+        _id: { $dateToString: { format: '%Y-%m-%d', date: '$submittedAt' } },
+        count: { $sum: 1 },
+      },
+    },
+    { $sort: { _id: 1 } },
+    { $project: { date: '$_id', count: 1, _id: 0 } },
+  ]);
+  return responseSubmissionTrend;
+};
+
 export const DashboardService = {
   getFormsPerMonth,
   getResponsesOverTime,
   getResponsesByForm,
   getFormStatus,
+  getAdminDashboardStats,
+  getUserGrowthForAdmin,
+  getPlanDistributionForAdmin,
+  getFormCreationTrendForAdmin,
+  getResponseSubmissionTrendForAdmin,
 };

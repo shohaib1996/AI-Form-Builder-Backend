@@ -5,6 +5,9 @@ import {
   updateProfile,
   resetPassword,
   getUserData,
+  getAllUsersForAdmin,
+  updateUserPlanByAdmin,
+  updateUserRoleByAdmin,
 } from './user.controller';
 import {
   signupSchema,
@@ -30,6 +33,24 @@ router.post(
   '/reset-password/:id',
   validateRequest(resetPasswordSchema),
   resetPassword,
+);
+
+router.get(
+  '/admin/users',
+  auth([userRoles.ADMIN]),
+  getAllUsersForAdmin,
+);
+
+router.patch(
+  '/admin/update-plan/:userId',
+  auth([userRoles.ADMIN]),
+  updateUserPlanByAdmin,
+);
+
+router.patch(
+  '/admin/update-role/:userId',
+  auth([userRoles.ADMIN]),
+  updateUserRoleByAdmin,
 );
 
 export default router;

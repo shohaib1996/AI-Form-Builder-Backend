@@ -62,3 +62,95 @@ export const findOrCreateGoogleUser = async (profile: {
   }
   return user;
 };
+
+export const getAllUsersForAdmin = async (options: {
+  page?: number;
+  limit?: number;
+  searchTerm?: string;
+}) => {
+  const { page = 1, limit = 10, searchTerm } = options;
+  const skip = (page - 1) * limit;
+
+  const query: any = {};
+
+  if (searchTerm) {
+    query.$or = [
+      { name: { $regex: searchTerm, $options: 'i' } },
+      { email: { $regex: searchTerm, $options: 'i' } },
+    ];
+  }
+
+  const users = await User.aggregate([
+    { $match: query },
+    {
+      $lookup: {
+        from: 'forms',
+        localField: '_id',
+        foreignField: 'userId',
+        as: 'forms',
+      },
+    },
+    {
+      $lookup: {
+        from: 'responses',
+        localField: 'forms._id',
+        foreignField: 'formId',
+        as: 'responses',
+      },
+    },
+    {
+      $project: {
+        name: 1,
+        email: 1,
+        planType: 1,
+        role: 1,
+        formCount: { $size: '$forms' },
+        responseCount: { $size: '$responses' },
+      },
+    },
+    { $skip: skip },
+    { $limit: limit },
+  ]);
+
+  const total = await User.countDocuments(query);
+
+  return {
+    data: users,
+    meta: {
+      page,
+      limit,
+      total,
+    },
+  };
+};
+
+export const updateUserPlanByAdmin = async (
+  userId: string,
+  planType: 'normal' | 'premium',
+) => {
+  const formLimit = planType === 'premium' ? 500 : 20;
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { planType, formLimit },
+    { new: true },
+  );
+  if (!updatedUser) {
+    throw new ApiError(404, 'User not found');
+  }
+  return updatedUser;
+};
+
+export const updateUserRoleByAdmin = async (
+  userId: string,
+  role: 'user' | 'admin',
+) => {
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { role },
+    { new: true },
+  );
+  if (!updatedUser) {
+    throw new ApiError(404, 'User not found');
+  }
+  return updatedUser;
+};

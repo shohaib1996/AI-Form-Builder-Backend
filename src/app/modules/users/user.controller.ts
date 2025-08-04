@@ -7,6 +7,9 @@ import {
   updateProfileService,
   resetPasswordService,
   getUserDataService,
+  getAllUsersForAdmin as getAllUsersForAdminService,
+  updateUserPlanByAdmin as updateUserPlanByAdminService,
+  updateUserRoleByAdmin as updateUserRoleByAdminService,
 } from './user.services';
 import { AuthRequest } from '../../middlewares/auth';
 
@@ -76,3 +79,52 @@ export const resetPassword = catchAsync(async (req: Request, res: Response) => {
 
 // Forgot password: You can add logic to send an email with a reset link/token.
 // For simplicity, not included here.
+
+export const getAllUsersForAdmin = catchAsync(
+  async (req: Request, res: Response) => {
+    const { page, limit, searchTerm } = req.query;
+
+    const options = {
+      page: page ? parseInt(page as string, 10) : 1,
+      limit: limit ? parseInt(limit as string, 10) : 10,
+      searchTerm: searchTerm as string | undefined,
+    };
+
+    const result = await getAllUsersForAdminService(options);
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Users retrieved successfully for admin',
+      data: result.data,
+      meta: result.meta,
+    });
+  },
+);
+
+export const updateUserPlanByAdmin = catchAsync(
+  async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    const { planType } = req.body;
+    const updatedUser = await updateUserPlanByAdminService(userId, planType);
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "User's plan updated successfully by admin",
+      data: updatedUser,
+    });
+  },
+);
+
+export const updateUserRoleByAdmin = catchAsync(
+  async (req: Request, res: Response) => {
+    const { userId } = req.params;
+    const { role } = req.body;
+    const updatedUser = await updateUserRoleByAdminService(userId, role);
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: "User's role updated successfully by admin",
+      data: updatedUser,
+    });
+  },
+);

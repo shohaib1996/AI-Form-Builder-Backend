@@ -27,4 +27,34 @@ router.get(
   DashboardController.getFormStatus,
 );
 
+router.get(
+  '/admin-stats',
+  auth([userRoles.ADMIN]),
+  DashboardController.getAdminDashboardStats,
+);
+
+router.get(
+  '/admin/user-growth',
+  auth([userRoles.ADMIN]),
+  DashboardController.getUserGrowthForAdmin,
+);
+
+router.get(
+  '/admin/plan-distribution',
+  auth([userRoles.ADMIN]),
+  DashboardController.getPlanDistributionForAdmin,
+);
+
+router.get(
+  '/admin/form-creation-trend',
+  auth([userRoles.ADMIN]),
+  DashboardController.getFormCreationTrendForAdmin,
+);
+
+router.get(
+  '/admin/response-submission-trend',
+  auth([userRoles.ADMIN]),
+  DashboardController.getResponseSubmissionTrendForAdmin,
+);
+
 export default router;

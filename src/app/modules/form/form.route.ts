@@ -6,6 +6,7 @@ import {
   getFormById,
   togglePublishForm,
   updateForm,
+  getAllFormsForAdmin,
 } from './form.controller';
 import { aiFormSchema, formValidationSchema } from './form.validation';
 import validateRequest from '../../middlewares/validateRequest';
@@ -27,6 +28,13 @@ router.post(
 
 // Get all forms (of current user)
 router.get('/', auth([userRoles.ADMIN, userRoles.USER]), getAllForms);
+
+// Get all forms (for admin)
+router.get(
+  '/admin/all',
+  auth([userRoles.ADMIN]),
+  getAllFormsForAdmin,
+);
 
 // Get single form by id
 router.get('/:id', auth([userRoles.ADMIN, userRoles.USER]), getFormById);

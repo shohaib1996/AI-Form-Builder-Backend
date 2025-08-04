@@ -67,7 +67,7 @@ export const getAllForms = async (
   const query: any = { userId };
 
   if (searchTerm) {
-    query.$or = [{ name: { $regex: searchTerm, $options: 'i' } }];
+    query.$or = [{ title: { $regex: searchTerm, $options: 'i' } }];
     if (searchTerm.match(/^[0-9a-fA-F]{24}$/)) {
       query.$or.push({ _id: searchTerm });
     }
@@ -122,4 +122,40 @@ export const togglePublishForm = async (id: string) => {
   form.isPublished = !form.isPublished;
   const updatedForm = await form.save();
   return updatedForm;
+};
+
+export const getAllFormsForAdmin = async (options: {
+  page?: number;
+  limit?: number;
+  searchTerm?: string;
+}) => {
+  const { page = 1, limit = 10, searchTerm } = options;
+  const skip = (page - 1) * limit;
+
+  const query: any = {};
+
+  if (searchTerm) {
+    query.$or = [
+      { title: { $regex: searchTerm, $options: 'i' } },
+      { 'user.name': { $regex: searchTerm, $options: 'i' } },
+      { 'user.email': { $regex: searchTerm, $options: 'i' } },
+    ];
+  }
+
+  const forms = await Form.find(query)
+    .populate('userId', 'name email')
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Form.countDocuments(query);
+
+  return {
+    data: forms,
+    meta: {
+      page,
+      limit,
+      total,
+    },
+  };
 };

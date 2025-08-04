@@ -76,9 +76,66 @@ const getFormStatus = catchAsync(async (req: AuthRequest, res: Response) => {
   });
 });
 
+const getAdminDashboardStats = catchAsync(
+  async (req: AuthRequest, res: Response) => {
+    const result = await DashboardService.getAdminDashboardStats();
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Admin dashboard stats fetched successfully',
+      data: result,
+    });
+  },
+);
+
+const getUserGrowthForAdmin = catchAsync(async (req, res) => {
+  const result = await DashboardService.getUserGrowthForAdmin();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User growth data fetched successfully',
+    data: result,
+  });
+});
+
+const getPlanDistributionForAdmin = catchAsync(async (req, res) => {
+  const result = await DashboardService.getPlanDistributionForAdmin();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Plan distribution data fetched successfully',
+    data: result,
+  });
+});
+
+const getFormCreationTrendForAdmin = catchAsync(async (req, res) => {
+  const result = await DashboardService.getFormCreationTrendForAdmin();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Form creation trend data fetched successfully',
+    data: result,
+  });
+});
+
+const getResponseSubmissionTrendForAdmin = catchAsync(async (req, res) => {
+  const result = await DashboardService.getResponseSubmissionTrendForAdmin();
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Response submission trend data fetched successfully',
+    data: result,
+  });
+});
+
 export const DashboardController = {
   getFormsPerMonth,
   getResponsesOverTime,
   getResponsesByForm,
   getFormStatus,
+  getAdminDashboardStats,
+  getUserGrowthForAdmin,
+  getPlanDistributionForAdmin,
+  getFormCreationTrendForAdmin,
+  getResponseSubmissionTrendForAdmin,
 };
