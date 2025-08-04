@@ -1,9 +1,10 @@
 import OpenAI from 'openai';
 import config from '../../config';
 import { Form } from './form.model';
+import { User } from '../users/user.model';
+
 const openai = new OpenAI({
   apiKey: config.OPENAI_API_KEY,
-  // baseURL: "https://api.deepseek.com/v1"
 });
 
 export const generateFormFields = async (prompt: string): Promise<any[]> => {
@@ -11,7 +12,7 @@ export const generateFormFields = async (prompt: string): Promise<any[]> => {
 Each field should have name, label, type (text, email, number, select, etc.), and required (true/false) and don't generate any file fields rather than generate a text field where take the document link (e.g. "http://example.com/document.pdf") from user. For selecting options, provide an array of options.`;
 
   const response = await openai.chat.completions.create({
-    model: 'gpt-3.5-turbo', // or "o4-mini" if you have access
+    model: 'gpt-3.5-turbo',
     messages: [
       {
         role: 'user',
@@ -33,7 +34,22 @@ Each field should have name, label, type (text, email, number, select, etc.), an
 };
 
 export const createForm = async (formData: any) => {
+  const user = await User.findById(formData.userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  if (user.formLimit && user.formLimit <= 0) {
+    throw new Error('Form limit reached. Please upgrade your plan.');
+  }
+
   const form = await Form.create(formData);
+
+  if (user.formLimit) {
+    user.formLimit -= 1;
+  }
+  await user.save();
+
   return form;
 };
 
@@ -51,7 +67,7 @@ export const getAllForms = async (
   const query: any = { userId };
 
   if (searchTerm) {
-    query.$or = [{ title: { $regex: searchTerm, $options: 'i' } }];
+    query.$or = [{ name: { $regex: searchTerm, $options: 'i' } }];
     if (searchTerm.match(/^[0-9a-fA-F]{24}$/)) {
       query.$or.push({ _id: searchTerm });
     }
@@ -89,6 +105,7 @@ export const updateForm = async (id: string, formData: any) => {
   }
   return updatedForm;
 };
+
 export const deleteForm = async (id: string) => {
   const deletedForm = await Form.findByIdAndDelete(id);
   if (!deletedForm) {
