@@ -1,6 +1,7 @@
 import config from '../../config';
 import stripe from '../../utils/stripe';
 import { Subscription } from './subscription.model';
+import { User } from '../users/user.model';
 
 interface LineItem {
   name: string;
@@ -69,6 +70,14 @@ export const addSubscription = async (data: CreateSubscriptionData) => {
   });
 
   await subscription.save();
+
+  if (data.planName === 'premium') {
+    await User.findByIdAndUpdate(data.userId, {
+      formLimit: 500,
+      planType: 'premium',
+    });
+  }
+
   return subscription;
 };
 

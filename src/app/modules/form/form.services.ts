@@ -37,9 +37,41 @@ export const createForm = async (formData: any) => {
   return form;
 };
 
-export const getAllForms = async (userId: string) => {
-  const forms = await Form.find({ userId }).sort({ createdAt: -1 });
-  return forms;
+export const getAllForms = async (
+  userId: string,
+  options: {
+    page?: number;
+    limit?: number;
+    searchTerm?: string;
+  },
+) => {
+  const { page = 1, limit = 10, searchTerm } = options;
+  const skip = (page - 1) * limit;
+
+  const query: any = { userId };
+
+  if (searchTerm) {
+    query.$or = [{ title: { $regex: searchTerm, $options: 'i' } }];
+    if (searchTerm.match(/^[0-9a-fA-F]{24}$/)) {
+      query.$or.push({ _id: searchTerm });
+    }
+  }
+
+  const forms = await Form.find(query)
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit);
+
+  const total = await Form.countDocuments(query);
+
+  return {
+    data: forms,
+    meta: {
+      page,
+      limit,
+      total,
+    },
+  };
 };
 
 export const getFormById = async (id: string) => {

@@ -15,6 +15,7 @@ const userSchema = new Schema<IUser>(
       default: userPlanTypes.NORMAL,
     },
     role: { type: String, enum: ['user', 'admin'], default: defaultRole },
+    formLimit: { type: Number, default: 20 },
   },
   {
     timestamps: true,
