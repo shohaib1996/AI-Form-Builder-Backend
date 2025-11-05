@@ -57,7 +57,7 @@ export const GoogleAuthController = {
 
       if (!code) {
         console.error('Google OAuth callback: No authorization code received.');
-        return res.redirect('https://form-ai-builder.vercel.app/login?error=access_denied');
+        return res.redirect('https://www.aiformgenerator.cloud/login?error=access_denied');
       }
 
       try {
@@ -111,19 +111,19 @@ export const GoogleAuthController = {
       );
       // Redirect with token in query parameter
       res.redirect(
-        `https://form-ai-builder.vercel.app/google-redirect?token=${req.session.token}`,
+        `https://www.aiformgenerator.cloud/google-redirect?token=${req.session.token}`,
       );
     } else {
       console.log(
-        'Google login failed after callback. Redirecting to frontend error page: https://form-ai-builder.vercel.app/login?error=auth_failed_redirect',
+        'Google login failed after callback. Redirecting to frontend error page: https://www.aiformgenerator.cloud/login?error=auth_failed_redirect',
       );
-      res.redirect('https://form-ai-builder.vercel.app/login?error=auth_failed_redirect');
+      res.redirect('https://www.aiformgenerator.cloud/login?error=auth_failed_redirect');
     }
   },
 
   logout: (req: Request, res: Response) => {
     req.session = null;
-    res.redirect('https://form-ai-builder.vercel.app/signin');
+    res.redirect('https://www.aiformgenerator.cloud/signin');
   },
 
   ensureAuthenticated: (req: Request, res: Response, next: NextFunction) => {

@@ -10,7 +10,7 @@ const app: Application = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://form-ai-builder.vercel.app', "https://aiformgenerator.cloud"],
+    origin: ['http://localhost:3000', 'https://form-ai-builder.vercel.app', "https://aiformgenerator.cloud", "https://www.aiformgenerator.cloud"],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     credentials: true,
   }),
