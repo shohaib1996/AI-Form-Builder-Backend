@@ -11,7 +11,7 @@ import { userRoles } from '../users/user.constant';
 const router = express.Router();
 
 router.post('/checkout', auth([userRoles.USER, userRoles.ADMIN]), checkout);
-router.get('/complete', auth([userRoles.USER]), complete);
+router.get('/complete', complete);
 router.get('/cancel', cancel);
 router.get(
   '/subscription',

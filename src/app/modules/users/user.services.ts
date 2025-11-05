@@ -46,6 +46,8 @@ export const resetPasswordService = async (id: string, newPassword: string) => {
   return user;
 };
 
+import { defaultRole, defaultPlan } from './user.constant';
+
 export const findOrCreateGoogleUser = async (profile: {
   email: string;
   name: string;
@@ -58,6 +60,8 @@ export const findOrCreateGoogleUser = async (profile: {
       name: profile.name,
       email: profile.email,
       photo: profile.picture || '',
+      role: defaultRole,
+      planType: defaultPlan,
     });
   }
   return user;

@@ -5,16 +5,22 @@ import { userPlanTypes } from '../users/user.constant';
 import catchAsync from '../../utils/catchAsync';
 import { updateProfileService } from '../users/user.services';
 
-export const checkout = async (req: Request, res: Response) => {
+export const checkout = async (req: AuthRequest, res: Response) => {
   try {
     const items = req.body.items;
+    const userId = req.user?._id;
+
+    if (!userId) {
+      res.status(401).json({ success: false, message: 'Unauthorized: User not found' });
+      return;
+    }
 
     if (!Array.isArray(items) || items.length === 0) {
       res.status(400).json({ success: false, message: 'Items are required' });
       return;
     }
 
-    const session = await PaymentService.createCheckoutSession(items);
+    const session = await PaymentService.createCheckoutSession(items, userId as any);
     res.status(200).json({ success: true, url: session.url });
   } catch (error) {
     console.error(error);
@@ -25,24 +31,17 @@ export const checkout = async (req: Request, res: Response) => {
   }
 };
 
-export const complete = async (req: AuthRequest, res: Response) => {
+export const complete = async (req: Request, res: Response) => {
   const sessionId = req.query.session_id as string;
 
   try {
     const { session } = await PaymentService.getCheckoutResult(sessionId);
 
-    if (!req.user || !req.user._id) {
-      res
-        .status(401)
-        .json({ success: false, message: 'Unauthorized: User not found' });
-      return;
-    }
-
-    const userId = req.user._id;
+    const userId = session.client_reference_id;
     const planName = userPlanTypes.PREMIUM;
 
     if (!userId) {
-      res.status(400).json({ success: false, message: 'User ID not found' });
+      res.status(400).json({ success: false, message: 'User ID not found in session' });
       return;
     }
 

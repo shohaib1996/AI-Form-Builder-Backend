@@ -19,7 +19,7 @@ interface CreateSubscriptionData {
   endsAt: Date | null;
 }
 
-export const createCheckoutSession = async (items: LineItem[]) => {
+export const createCheckoutSession = async (items: LineItem[], userId: string) => {
   const line_items = items.map((item) => ({
     price_data: {
       currency: item.currency,
@@ -34,6 +34,7 @@ export const createCheckoutSession = async (items: LineItem[]) => {
   const session = await stripe.checkout.sessions.create({
     line_items,
     mode: 'payment',
+    client_reference_id: userId,
     shipping_address_collection: {
       allowed_countries: config.ALLOWED_COUNTRIES as any[],
     },
