@@ -14,7 +14,7 @@ interface DecodedUser {
 export interface AuthRequest extends Request {
   user?: DecodedUser;
 }
-
+// Authentications
 export const auth = (roles: string[] = []) => {
   // console.log("roles", roles);
   return (req: AuthRequest, res: Response, next: NextFunction) => {
