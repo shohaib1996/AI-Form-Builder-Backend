@@ -1,3 +1,5 @@
+// dashboard.controller.ts
+
 import { Response } from 'express';
 import catchAsync from '../../utils/catchAsync';
 import { DashboardService } from './dashboard.services';
